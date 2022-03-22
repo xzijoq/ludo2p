@@ -1,0 +1,14 @@
+[settings]
+os=Android
+os.api_level=23
+arch=armv8
+compiler=clang
+compiler.version=11
+compiler.libcxx=c++_shared
+build_type=Release
+
+[conf]
+tools.android:ndk_path=/home/babayaga/Android/Sdk/ndk/22.1.7171670/
+[env]
+ANDROID_NDK_ROOT=/home/babayaga/Android/Sdk/ndk/22.1.7171670/
+
