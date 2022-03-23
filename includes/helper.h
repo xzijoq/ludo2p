@@ -26,7 +26,7 @@
 #include <asio.hpp>
 
 //#include "style.h"
-
+#include "global.h"
 
 
 using namespace std::placeholders;
@@ -41,10 +41,11 @@ using std::string;
 
 
 string checkec( std::error_code ec, string file, string func, int line, string msg="" );
+string checkec( bool wh, string file, string func, int line, string msg="" );
 string checkec( string file, string func, int line, string msg ="");
 string showSock(asio::ip::tcp::socket&);
 
-
+void DisplayBits( u64 num, int sp=8, bool val=false );
 
 
 

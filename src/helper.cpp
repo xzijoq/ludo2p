@@ -6,11 +6,28 @@
 #include <string>
 #include <system_error>
 
-
 using std::cout;
 using std::endl;
 using std::error_code;
-bool   once = false;
+bool once = false;
+
+void DisplayBits( u64 num, int sp, bool val )
+{
+    cout << "\n";
+    for ( auto i = 63; i >= 0; i-- )
+    {
+        if ( ( num & (u64)1 << i ) )
+        {
+            if ( val ) { cout << "(" << ( num & (u64)1 << i ) << ")"; }
+            else{cout<<1;}
+        }
+        else {  cout << 0; }
+        if ( ( i ) % sp == 0 ) { cout << " "; }
+        if ( ( i ) % 4 == 0 && sp == 8 ) { cout << " "; }
+    }
+    cout << "\n";
+}
+
 string checkec( error_code ec, string file, string func, int line, string msg )
 {
     //@Took 2 hours to figureout !!!
@@ -55,6 +72,23 @@ string checkec( string file, string func, int line, string msg )
 
     if ( msg != "" ) { fmt::print( grStyle, "{}", out ); }
     else { fmt::print( okStyle, "{}", out ); }
+
+    cout << endl;
+
+    return out;
+}
+string checkec( bool wh, string file, string func, int line, string msg )
+{
+    if ( wh == true ) { return ""; }
+    string out = "\n";
+
+    //@Took 2 hours to figureout !!!
+    if ( (int)msg[msg.size() - 1] == 13 ) { msg.resize( msg.size() - 1 ); }
+    if ( msg != "" ) { out += fmt::format( "Failed -> {:<}  || ", msg ); }
+    out += fmt::format( "Check: Line :{:<} || Func:{:<} || File :{:<}", line,
+                        func, file );
+
+    fmt::print( eStyle, "{}", out );
 
     cout << endl;
 

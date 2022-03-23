@@ -13,3 +13,8 @@
 - :hammer: in cmake lists the android version of godot-cpp must be linked (automate)
 - :hammer: for godot compile multiple libraries for each platform :pill: will do after upgrading to godot4 gd extentions, or will have to redo for no reason 
 - :beetle: fmt dosent compile well with libc++, which may be used for xcompiling on android (to check switch to libc++ in conan profile)
+
+
+# :beetle: called a STATIC FUNCTION via MEMBER in [piecetest](./tests/piecetest.cpp) on line 109
+- on march 24 commit globalPiece
+  

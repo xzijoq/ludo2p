@@ -14,7 +14,7 @@ import inspect
 from inspect import currentframe, getframeinfo
 
 conan = True
-TargetApp = False
+TargetApp = True
 EnableTest = True
 godot = False
 # ---------DEFS DONT ALTER-------------
@@ -75,6 +75,9 @@ if TargetApp:
 
 # --------Test---
 
+if EnableTest==True:
+    TestSourceDir="tests/";
+    Tests=['ggtest']
 
 # ----EndTest------
 
@@ -277,10 +280,16 @@ def run_test():
     if EnableTest==False:
         p_wrn("EnableTest is FALSE")
         return
-    os.chdir(build_dir_path)
-    test=f"ctest"
-    result = subprocess.run([test], shell=True)
-    p_nfy(f"{result}")
+    #$CAN USE CTEST FOR ITS FEATURES
+    #test=f"ctest  --output-on-failure --verbose --gtest_color=yes"
+    test_dir=join(build_dir_path,TestSourceDir)
+    for i in Tests:
+        test_path=join(test_dir,i)
+        test_command=test_path
+        if args.tea!="":
+            test_command+=args.tea
+        result = subprocess.run([test_command], shell=True)
+        p_nfy(f"{result}")
 
 
 def conan_run():
@@ -398,6 +407,7 @@ parser.add_argument("-cma", help="cmake args ENTER IN QUOTES", default="")
 parser.add_argument(
     "-cba", help="cmake build args ENTER IN QUOTES", default="")
 parser.add_argument("-coa", help="conan args ENTER IN QUOTES", default="")
+parser.add_argument("-tea", help="TEST args ENTER IN QUOTES", default="")
 parser.add_argument("-sc", "--scene", help="GodotScene", default="")
 args = parser.parse_args()
 
