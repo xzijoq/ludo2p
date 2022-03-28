@@ -2,33 +2,46 @@
 #include <global.h>
 
 #include <string>
-struct op
+using namespace Global;
+
+enum struct b_PieceFlags : u64
 {
-    int from;
-    int size;
+    b_ece_valid,
+    b_ece_won,
+    b_ece_start,
+    b_ece_safe,
+    z_PieceFlagsSize
 };
 
-//% PieceNum  | Square  | Entry Sq | Switch Sq |
-//% 0-5(6:64) | 6-12(7) | 13-19(7) | 20-26(7)  |
-//@ Valid | Won |
-//@  64   | 63  |
 class Piece
 {
    public:
-    u64         mEce=0;
-    static u64 getEce(u64 ply, u64 awn);
+    u64        mPiece = 0;
 
 
+    void setEce( u64 ece );
+    void setEce( u64 plr, u64 pwn );
+    u64  getEce() const;
 
-    void        setEce( u64 );
-    void        setEce( u64,u64 );
-    //void setSq();
+    void setSq( u64 sq );
+    u64  getSq() const;
 
+    void setEntrySq( u64 sq );
+    u64  getEntrySq() const;
+ 
 
-    u64         getPlr();
-    u64         getAwn();
-    u64         getEce();
+    void setSwitchSq( u64 sq );
+    u64  getSwitchSq() const;
 
+    u64 getPlr();
+    u64 getAwn();
+
+    void setFlag( b_PieceFlags flg, bool what );
+    u64  getFlag( b_PieceFlags flg );
+
+    void InitPiece(u64 ece,u64 sq,u64 entry_sq,u64 switch_sq);
+
+    void        testing();
     void        CheckPiece();
     std::string DebugString() const;
 };

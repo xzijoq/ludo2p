@@ -1,2 +1,11 @@
-int CURRENT_PLAYERS=5;
-int CURRENT_PAWNS=7;
+#include "global.h"
+
+namespace Global
+{
+
+ // namespace Global
+
+u64 CURRENT_PLAYERS = 8;
+u64 CURRENT_AWNS    = 6;
+u64 CURRENT_SQUARES = MAX_SQUARES;
+}

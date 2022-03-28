@@ -13,7 +13,7 @@ using std::cout;
 using std::endl;
 TEST( GlobalTest, GlobalConstraints )
 {
-    ASSERT_LE( CURRENT_PLAYERS * CURRENT_PAWNS, MAX_PIECE_COUNT );
+    ASSERT_LE( CURRENT_PLAYERS * CURRENT_AWNS, MAX_PIECE_COUNT );
 }
 
 TEST( Core, bits )
@@ -46,10 +46,10 @@ TEST( Core, bits )
 
     //$SetBits
     num       = 0;
-    int count = 5;
+    u64 count = 5;
     u64 bits  = 0b11111;
-    int posi  = 28;
-    SetBits( num, bits, posi , count);
+    u64 posi  = 28;
+    SetBits( num, bits, posi, count );
     ASSERT_EQ( num, 8321499136 );
 
     //$GetBits
@@ -62,6 +62,11 @@ TEST( Core, bits )
     ASSERT_EQ( GetBits( num, 28, 5 ), 0b11001 );
 
     //    DisplayBits( num );
+}
+TEST( Core, getEce ) {
+
+    ASSERT_EQ( Global::GetEce( 0, 0 ), 0 );
+
 }
 
 int main( int argc, char* argv[] )

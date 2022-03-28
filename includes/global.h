@@ -5,21 +5,66 @@
 
 #include <cstdint>
 
-// 32 bit may not provide it may need to switch to fast uint_fast64_t
-// https://en.cppreference.com/w/cpp/types/integer
+#ifdef NDEBUG
+    #undef NDEBUG
+#endif
+#include <cassert>
+
 using u64 = std::uint_fast64_t;
 
-static constexpr int MAX_SQUARES     = 128;
-static constexpr int SQ_SZb=7;
-static constexpr int MAX_PIECE_COUNT = 48;
+namespace Global
+{
+inline consteval u64 ceillog2( u64 num )
+{
+    for ( u64 i = 0; i < 63; i++ )
+    {
+        if ( num <= ( (u64)1 << i ) ) { return i; }
+    }
+    return 0;
+}
+inline constexpr u64 GetWinSquare(u64 otrSqCnt,u64 inrSqCnt){
+    return otrSqCnt+inrSqCnt;
+}
+inline constexpr u64 GetHomeSquare(u64 otrSqCnt,u64 inrSqCnt){
+    return GetWinSquare(otrSqCnt, inrSqCnt)+1;
+}
+inline constexpr u64 GetSquareCount(u64 otrSqCnt,u64 inrSqCnt){
+    return GetHomeSquare(otrSqCnt, inrSqCnt)+1;
+}
 
-extern int CURRENT_PLAYERS;
-extern int CURRENT_PAWNS;
+inline constexpr u64 MAX_SQUARES = 128;
+inline constexpr u64 SQ_SZb      = Global::ceillog2( MAX_SQUARES );
 
-static constexpr int MAX_PLAYERS2     = 24;
-static constexpr int MAX_PAWN2        = 24;
-static constexpr int OUTER_RING2     = 28;
+inline constexpr u64 MAX_PIECE_COUNT = 48;
+inline constexpr u64 MAX_PLAYERS     = 8;
+inline constexpr u64 MAX_PAWNS       = 24;
+
+inline constexpr u64 OUTER_RING = 28;
+
+//*for teting and debugging only these will not be used by relevent game files
+extern u64 CURRENT_PLAYERS;
+extern u64 CURRENT_AWNS;
+extern u64 CURRENT_SQUARES;
+//*for teting only these will not be used by relevent game files
 
 //$ storage size in bits
 
+inline u64 GetEce( u64 pl, u64 awn )
+{
+    assert( pl < CURRENT_PLAYERS && awn < CURRENT_AWNS );
+    u64 result = CURRENT_AWNS * pl + awn;
 
+    assert( result < MAX_PIECE_COUNT );
+    return result;
+}
+
+}  // namespace Global
+
+// inline consteval u64  GetEce( u64 pl, u64 awn )
+//{
+//     assert( pl < CURRENT_PLAYERS && awn < CURRENT_PAWNS );
+//     u64 result = CURRENT_PAWNS * pl + awn;
+//
+//     assert( result < MAX_PIECE_COUNT );
+//     return result;
+// }

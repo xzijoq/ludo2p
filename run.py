@@ -49,7 +49,7 @@ if conan:
 
 # ---------------- CMAKE DATA START ---------------
 # -- Required vaiables-- set to "" if not in use
-if Fatal==True:
+if Fatal == True:
     build_dir = "build"
     build_dir_path = join(cwd, build_dir)
 
@@ -75,9 +75,9 @@ if TargetApp:
 
 # --------Test---
 
-if EnableTest==True:
-    TestSourceDir="tests/";
-    Tests=['ggtest']
+if EnableTest == True:
+    TestSourceDir = "tests/"
+    Tests = ['ggtest']
 
 # ----EndTest------
 
@@ -100,43 +100,43 @@ if godot:
 def MainFunc():
     p_fnc("executing")
     goRun_check()
-    if goRun_has('clean'):
+    if 'clean' in args.goRun:
         clean()
         return
-    if goRun_has('c'):
+    if 'c' in args.goRun:
         conan_run()
-    if goRun_has('r'):
+    if 'r' in args.goRun:
         cmake_run()
-    if goRun_has('b'):
+    if 'b' in args.goRun:
         cmake_build()
-    if goRun_has('x'):
+    if 'x' in args.goRun:
         run_target()
-    if goRun_has('t'):
-        run_test()        
-    if goRun_has('gc'):
+    if 't' in args.goRun:
+        run_test()
+    if 'gc' in args.goRun:
         godot_copy()
-    if goRun_has('gx'):
+    if 'gx' in args.goRun:
         godot_run()
     goRun_check()
     p_mwg("Script END")
     return 0
 
 
-def goRun_has(ch):
-    for i in args.goRun:
-        if i == ch:
-            return True
-    else:
-        return False
-
 
 def goRun_check():
     p_fnc("executing")
-    isValid = goRun_has('clean') or goRun_has('c') or goRun_has(
-        'r') or goRun_has('b') or goRun_has('x') or goRun_has('gc') or goRun_has('gx')
+    validLis = ['c', 'r', 'b', 'x', 't', 'gc', 'gx', 'clean']
+    isValid = False
+    # isValid = goRun_has('clean') or goRun_has('c') or goRun_has(
+    #    'r') or goRun_has('b') or goRun_has('x') or goRun_has('gc') or goRun_has('gx')
+    for i in args.goRun:
+        if i in validLis:
+            isValid = True
+        else:
+            p_wrn(f"Unused argument: {i}")
+        pass
     if not isValid:
         p_msg(f"Valid Arguments to Run:\n\
-            clean: clean() and return\n\
             c:     conan_run()\n\
             r:     cmake_run()\n\
             b:     cmake_build()\n\
@@ -144,25 +144,25 @@ def goRun_check():
             t:     run_tests()\n\
             gc:    godot_copy()\n\
             gx:    godot_run()\n\
+            clean: clean() and return\n\
             --help: for help\n\
         ")
 
         p_err("Please Enter a Valid Command", Fatal)
-    if(goRun_has('c') and conan == False):
+    if(('c' in args.goRun) and conan == False):
         p_wrn(f"Coan is set to false, yet coanan_run() was requested via arg 'c'\n")
 
-    if((goRun_has('gc')) and godot == False):
+    if(('gc' in args.goRun) and godot == False):
         p_wrn("Godot is set to false, yet godot_copy() was requested via arg 'gc' \n")
-    if((goRun_has('gx')) and godot == False):
+    if(('gx' in args.goRun) and godot == False):
         p_wrn("Godot is set to false, yet  godot_run() was requested via arg 'gx'\n")
 
-    if((goRun_has('gx')) and not goRun_has('gc')):
+    if(('gx' in args.goRun) and not goRun_has('gc')):
         p_err("Will Try To Run Godot Scene Without Copying THe LIBRARY !!!! \n")
 
-
-    if(goRun_has('x') and TargetApp == False):
+    if(('x' in args.goRun) and TargetApp == False):
         p_wrn("TargetApp is set to false, yet run_target() was requested via arg 'x'\n")
-    if(goRun_has('t') and EnableTest == False):
+    if(('t' in args.goRun) and EnableTest == False):
         p_wrn("EnableTest is set to false, yet run_test) was requested via arg 't'\n")
 
 
@@ -275,19 +275,20 @@ def run_target():
     )
     p_nfy(f"{result}")
 
+
 def run_test():
     p_fnc("executing")
-    if EnableTest==False:
+    if EnableTest == False:
         p_wrn("EnableTest is FALSE")
         return
-    #$CAN USE CTEST FOR ITS FEATURES
+    # $CAN USE CTEST FOR ITS FEATURES
     #test=f"ctest  --output-on-failure --verbose --gtest_color=yes"
-    test_dir=join(build_dir_path,TestSourceDir)
+    test_dir = join(build_dir_path, TestSourceDir)
     for i in Tests:
-        test_path=join(test_dir,i)
-        test_command=test_path
-        if args.tea!="":
-            test_command+=args.tea
+        test_path = join(test_dir, i)
+        test_command = test_path
+        if args.tea != "":
+            test_command += args.tea
         result = subprocess.run([test_command], shell=True)
         p_nfy(f"{result}")
 
