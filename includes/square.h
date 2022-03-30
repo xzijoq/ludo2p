@@ -1,9 +1,13 @@
 #pragma once
-#include "global.h"
+#include <array>
 #include <string>
-using namespace Global;
 
-enum struct b_SquareFlags:u64
+#include "core.h"
+#include "global.h"
+#include "helper.h"
+#include "u64def.h"
+
+enum struct b_SquareFlags : u64
 {
     b_sq_valid,
     b_sq_safe,
@@ -12,25 +16,24 @@ enum struct b_SquareFlags:u64
     b_sq_end,
     zSqSz
 };
-//0-48 ece 
-class Square{
-    public:
-    u64 mSquare=0;
+// 0-48 ece
+class Square
+{
+   public:
+    u64 mSquare = 0;
 
-    void putEce(u64 ece);
-    void popEce(u64 ece);
-    
-    u64 hasEce(u64 ece);
-    u64 hasPlr(u64 plr)const;
+    void putEce( u64 ece );
+    void popEce( u64 ece );
 
-    void setFlag(b_SquareFlags flg,bool what);
+    u64 hasEce( u64 ece );
+    u64 hasPlr( u64 plr ) const;
 
-    u64 getFlag(b_SquareFlags flg) const;
+    void setFlag( b_SquareFlags flg, bool what );
 
-    void CheckSquare();
-    std::string DebugString ()const;
+    u64 getFlag( b_SquareFlags flg ) const;
 
-
-
-
+    void        CheckSquare();
+    std::string DebugString( u64 CrntPlr = Global::MAX_PLAYERS,
+                             u64 CrntAwn = Global::MAX_PAWNS ) const;
 };
+// basically a bit mask for each ece

@@ -1,3 +1,7 @@
+# :red_book: Global COmments
+- has plr depends on knowledge of current awns (In Square)
+
+
 # :blue_book: Things logged
 - [git hub emojes](https://gist.github.com/rxaviers/7360908)
 - godot 4 gdextention not used yet

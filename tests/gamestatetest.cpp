@@ -1,13 +1,9 @@
 #include <gtest/gtest.h>
-#include <math.h>
 
-#include <cstdint>
-#include <limits>
-
-#include "core.h"
-#include "gamestate.h"
 #include "global.h"
-
+#include "gamestate.h"
+#include "RegularMaps.h"
+using namespace Global;
 TEST( GameStateTest, SetGetCnt )
 {
     GameState g1;

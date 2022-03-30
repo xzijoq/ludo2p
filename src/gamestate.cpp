@@ -4,10 +4,10 @@
 #include <array>
 #include <cassert>
 
+#include "RegularMaps.h"
 #include "core.h"
 #include "global.h"
 #include "helper.h"
-
 using namespace Global;
 //*ceil( (log2)(8) )
 static constexpr u64 MaxPlayers_b = ceillog2( MAX_PLAYERS ) + 1;
@@ -58,9 +58,8 @@ static consteval u64 b_frm( const b_GameStateLayout inx )
 void GameState::setMaxPlrCnt( u64 cp )
 {
     assert( cp <= MAX_PLAYERS );
-    SetBits( mGameState, cp, b_frm( b_max_plr_cnt ),
-             b_SzOf[(u64)b_max_plr_cnt] );
-    CURRENT_PLAYERS = cp;  //*only for debug and testing
+    mGameState = SetBits( mGameState, cp, b_frm( b_max_plr_cnt ),
+                          b_SzOf[(u64)b_max_plr_cnt] );
 }
 u64 GameState::getMaxPlrCnt() const
 {
@@ -73,9 +72,8 @@ u64 GameState::getMaxPlrCnt() const
 void GameState::setCrntPlrCnt( u64 cp )
 {
     assert( cp <= MAX_PLAYERS );
-    SetBits( mGameState, cp, b_frm( b_crnt_plr_cnt ),
-             b_SzOf[(u64)b_crnt_plr_cnt] );
-    CURRENT_PLAYERS = cp;  //*only for debug and testing
+    mGameState = SetBits( mGameState, cp, b_frm( b_crnt_plr_cnt ),
+                          b_SzOf[(u64)b_crnt_plr_cnt] );
 }
 u64 GameState::getCrntPlrCnt() const
 {
@@ -87,9 +85,8 @@ u64 GameState::getCrntPlrCnt() const
 void GameState::setCrntAwnCnt( u64 awn )
 {
     assert( awn <= MAX_PAWNS );
-    SetBits( mGameState, awn, b_frm( b_crnt_awn_cnt ),
-             b_SzOf[(u64)b_crnt_awn_cnt] );
-    CURRENT_AWNS = awn;  //*only for debug and testing
+    mGameState = SetBits( mGameState, awn, b_frm( b_crnt_awn_cnt ),
+                          b_SzOf[(u64)b_crnt_awn_cnt] );
 }
 u64 GameState::getCrntAwnCnt() const
 {
@@ -105,12 +102,12 @@ void GameState::setPlrState( u64 plr, bool what )
     if ( what )
     {
         check_p( not getPlrState( plr ), "Player Was Already Active" );
-        SetBit( mGameState, b_frm( b_player_state ) + plr );
+        mGameState=SetBit( mGameState, b_frm( b_player_state ) + plr );
     }
     else
     {
         check_p( getPlrState( plr ), "Player Was Already InActive" );
-        UnSetBit( mGameState, b_frm( b_player_state ) + plr );
+        mGameState=UnSetBit( mGameState, b_frm( b_player_state ) + plr );
     }
 }
 u64 GameState::getPlrState( u64 plr ) const
@@ -122,8 +119,8 @@ u64 GameState::getPlrState( u64 plr ) const
 void GameState::setOtrSqCnt( u64 sqc )
 {
     assert( sqc <= MAX_SQUARES );
-    SetBits( mGameState, sqc, b_frm( b_otr_sq_cnt ),
-             b_SzOf[(u64)b_otr_sq_cnt] );
+    mGameState = SetBits( mGameState, sqc, b_frm( b_otr_sq_cnt ),
+                          b_SzOf[(u64)b_otr_sq_cnt] );
 }
 u64 GameState::getOtrSqCnt() const
 {
@@ -135,8 +132,8 @@ u64 GameState::getOtrSqCnt() const
 void GameState::setInrSqCnt( u64 sqc )
 {
     assert( sqc <= MAX_SQUARES );
-    SetBits( mGameState, sqc, b_frm( b_inr_sq_cnt ),
-             b_SzOf[(u64)b_inr_sq_cnt] );
+    mGameState = SetBits( mGameState, sqc, b_frm( b_inr_sq_cnt ),
+                          b_SzOf[(u64)b_inr_sq_cnt] );
 }
 u64 GameState::getInrSqCnt() const
 {

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.2)
 
 set(ggtests ggtest)
 add_executable(${ggtests} coretest.cpp piecetest.cpp squaretest.cpp
-                          gamestatetest.cpp game2ptest.cpp)
+                          gamestatetest.cpp game2ptest.cpp RegularMapstest.cpp Gametest.cpp)
 target_link_libraries(${ggtests} PRIVATE ${Core} ${CommonLib} GTest::GTest)
 target_compile_options(${ggtests} PRIVATE ${CommonFlg})
 

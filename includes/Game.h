@@ -1,4 +1,6 @@
+#pragma once
 #include "gamestate.h"
+#include "global.h"
 #include "helper.h"
 #include "piece.h"
 #include "square.h"
@@ -7,10 +9,10 @@ using enum b_SquareFlags;
 using enum b_PieceFlags;
 
 //*Most called functions (by Ai mainly) Must be optimised
-
-inline void MoveRaw( Piece& ece, u64 to, Square sq[] )
+inline void MoveRaw( Piece eceVal, u64 to, Piece piece[], Square sq[] )
 {
-    u64 frm = ece.getSq();  // inline when optimize
+    Piece& ece = piece[eceVal.getEce()];
+    u64    frm = ece.getSq();  // inline when optimize
 
     ece.setSq( to );
     sq[frm].popEce( ece.getEce() );
@@ -18,21 +20,26 @@ inline void MoveRaw( Piece& ece, u64 to, Square sq[] )
 }
 
 //^ MAX DIE ROLL IS 13*(mapsize-1) DISTANCE
-inline void gMove( Piece& ece, u64 count, Piece piece[], Square sq[],
-                   GameState gs )
+inline void GameMove( Piece eceVal, u64 count, Piece piece[], Square sq[],
+                      GameState gs )
 {
+    Piece& ece = piece[eceVal.getEce()];
     check_fp( count < 13, "Roll: " << count << " MAX DIE ROLL IS 13" );
     u64 frmSq   = ece.getSq();
     u64 toSqRaw = frmSq + count;
     u64 toSq    = toSqRaw % gs.getOtrSqCnt();
 
-
     if ( false ) {}
     //%StartMove
     else if ( frmSq == gs.getHomeSq() )
     {
-        //( count == 6 ) ? toSq = ece.getEntrySq() : toSq = frmSq;
-        toSq = ( ece.getEntrySq() + count ) % gs.getOtrSqCnt();
+        if ( count == 6 ) { toSq = ece.getEntrySq(); }
+        else
+        {
+            toSq = frmSq;
+            check_d( "\nInvaldStartMove" );
+        }
+        // toSq = ( ece.getEntrySq() + count ) % gs.getOtrSqCnt();
     }
     //%Switch into inner square
     //^following sets the max die roll to 13 in 2p games 13*(n-1)
@@ -50,7 +57,6 @@ inline void gMove( Piece& ece, u64 count, Piece piece[], Square sq[],
         toSq = toSqRaw;
     }
     //%End Swithc into inner square
-
     //%Target sq not empty nor safe
     else if ( /*not sq[toSq].getFlag( b_sq_empty) and*/ not sq[toSq].getFlag(
         b_sq_safe ) )
@@ -66,7 +72,7 @@ inline void gMove( Piece& ece, u64 count, Piece piece[], Square sq[],
                       this_awn++ )
                 {
                     check_d( "\nWHo:" << this_plr << " " << this_awn );
-                    u64 this_ece = GetEce( this_plr, this_awn );
+                    u64 this_ece = Global::GetEce( this_plr, this_awn );
                     u64 Capture  = sq[toSq].hasEce( this_ece );
                     if ( Capture )
                     {
@@ -74,7 +80,7 @@ inline void gMove( Piece& ece, u64 count, Piece piece[], Square sq[],
                                                    << this_awn << " "
                                                    << this_ece );
                         //%Send Em home
-                        MoveRaw( piece[this_ece], gs.getHomeSq(), sq );
+                        MoveRaw( piece[this_ece], gs.getHomeSq(), piece,sq );
                     }
                     // todo push to move array
                 }
@@ -89,7 +95,7 @@ inline void gMove( Piece& ece, u64 count, Piece piece[], Square sq[],
     }
     // todo push to move array
 
-    MoveRaw( ece, toSq, sq );
+    MoveRaw( ece, toSq,piece, sq );
 
     // u64 toSq=
 }

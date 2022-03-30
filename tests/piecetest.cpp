@@ -1,14 +1,10 @@
 #include <gtest/gtest.h>
 #include <piece.h>
-
-#include <cstdint>
-
-#include "core.h"
 #include "global.h"
-#include "helper.h"
+
 using std::cout;
 using std::endl;
-
+using namespace Global;
 
 
 //$check line 109-110
@@ -24,14 +20,14 @@ TEST( PieceTest, SetGetEce )
     ASSERT_EQ( ece.getEce(), 0 );
 
     // SetBits(num, 10, 0b1111111111, 0);
-    num = Global::GetEce( CURRENT_PLAYERS - 1, CURRENT_AWNS - 1 );
+    num = Global::GetEce( MAX_PLAYERS - 1, MAX_PAWNS- 1 );
     ece.setEce( num );
     ASSERT_EQ( ece.getEce(), num );
 }
 TEST( PieceTest, getPlr0Awn )
 {
     Piece ece;
-    // for ( auto i = 0; i < CURRENT_PAWNS * CURRENT_PLAYERS; i++ )
+    // for ( auto i = 0; i < CURRENT_PAWNS *  MAX_PLAYERS; i++ )
     //{
     //     ece.mEce = i;
     //     cout << "Pl: " << ece.getPlr() << "Aw: " << ece.getAwn() << endl;
@@ -41,10 +37,10 @@ TEST( PieceTest, getPlr0Awn )
     ASSERT_EQ( ece.getPlr(), 0 );
     ASSERT_EQ( ece.getAwn(), 0 );
 
-    ece.setEce( CURRENT_AWNS * CURRENT_PLAYERS - 1 );
+    ece.setEce(  MAX_PAWNS *  MAX_PLAYERS - 1 );
 
-    ASSERT_EQ( ece.getPlr(), CURRENT_PLAYERS - 1 );
-    ASSERT_EQ( ece.getAwn(), CURRENT_AWNS - 1 );
+    ASSERT_EQ( ece.getPlr(),  MAX_PLAYERS - 1 );
+    ASSERT_EQ( ece.getAwn(),  MAX_PAWNS - 1 );
 }
 
 
@@ -56,15 +52,15 @@ TEST( PieceTest, setEce1 )
     ASSERT_EQ( ece.getEce(), 0 );
 
     ece.mPiece = 0;
-    u64 num    = Global::GetEce( CURRENT_PLAYERS - 1, CURRENT_AWNS - 1 );
-    ece.setEce( CURRENT_PLAYERS - 1, CURRENT_AWNS - 1 );
+    u64 num    = Global::GetEce(  MAX_PLAYERS - 1,  MAX_PAWNS - 1 );
+    ece.setEce(  MAX_PLAYERS - 1,  MAX_PAWNS - 1 );
     ASSERT_EQ( ece.getEce(), num );
 }
 
 TEST( PieceTest, SetGetSqareT )
 {
     Piece ece;
-    u64   num = CURRENT_SQUARES-1;
+    u64   num =  MAX_SQUARES-1;
     ece.setSq( num );
     ASSERT_EQ( ece.getSq(), num );
 }
@@ -72,14 +68,14 @@ TEST( PieceTest, SetGetSqareT )
 TEST( PieceTest, SetGetEntrySqareT )
 {
     Piece ece;
-    u64   num = CURRENT_SQUARES-1;
+    u64   num =  MAX_SQUARES-1;
     ece.setEntrySq( num );
     ASSERT_EQ( ece.getEntrySq(), num );
 }
 TEST( PieceTest, SetGetSwitchSqareT )
 {
     Piece ece;
-    u64   num = CURRENT_SQUARES-1;
+    u64   num =  MAX_SQUARES-1;
     ece.setSwitchSq( num );
     ASSERT_EQ( ece.getSwitchSq(), num );
 }

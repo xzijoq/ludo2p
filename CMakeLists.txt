@@ -37,7 +37,9 @@ add_library(${Core} SHARED)
 # add_executable(${Core} )
 
 set(SOURCES src/piece.cpp src/global.cpp src/square.cpp
-            src/visualtest.cpp src/game2p.cpp src/gamestate.cpp ${CommonSrc})
+            src/visualtest.cpp src/game2p.cpp src/gamestate.cpp
+            src/graphics_move.cpp
+            ${CommonSrc})
 
 # target_precompile_headers(${Core} PUBLIC includes/defs.h)
 target_include_directories(${Core} PUBLIC includes)

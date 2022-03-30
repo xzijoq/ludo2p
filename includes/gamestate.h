@@ -1,8 +1,6 @@
 #pragma once
-#include <global.h>
-
+#include "u64def.h"
 #include <string>
-using namespace Global;
 
 class GameState
 {

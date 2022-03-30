@@ -7,16 +7,17 @@
 #include "global.h"
 #include "helper.h"
 #include "square.h"
-
+/*
 using enum b_SquareFlags;
 
 static constexpr u64 active = 1;
-
 [[maybe_unused]] static constexpr u64 in_active = 0;
-template <>
-void Game2p<>::InitGame( u64 numPlr, u64 numAwn )
+
+
+template <int sz>
+void Game2p<sz>::InitGame( u64 numPlr, u64 numAwn )
 {
-    check_f( numPlr * numAwn == (u64)EceSz );
+   // check_f( numPlr * numAwn == (u64)EceSz );
     mGState.InitGameState( MaxPlayers2p, numPlr, numAwn, OuterSqCnt2p,
                            InnerSqCnt2p );
     CURRENT_PLAYERS = MaxPlayers2p;
@@ -41,3 +42,4 @@ void Game2p<>::InitGame( u64 numPlr, u64 numAwn )
 
 
 
+*/

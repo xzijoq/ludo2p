@@ -4,11 +4,11 @@
 #include <fmt/core.h>
 #include <fmt/format.h>
 
+#include <cstdint>
 #include <iostream>
 
+#include "u64def.h"
 //#include "style.h"
-#include "global.h"
-using namespace Global;
 
 #if __clang__ || __GNUC__
     #define where __FILE__, __PRETTY_FUNCTION__, __LINE__
@@ -16,49 +16,66 @@ using namespace Global;
     #define where __FILE__, __function__, __LINE__
 #endif
 //#define ASIO_ENABLE_HANDLER_TRACKING
+//#define CompileDebug
+#ifdef CompileDebug
+    #define check_p( condition, message )                                      \
+        do {                                                                   \
+            if ( !( condition ) )                                              \
+            {                                                                  \
+                fmt::print( orStyle, "\n{} FAILED ", #condition );             \
+                std::cout << message;                                          \
+                fmt::print( " {} {} {} ", __FILE__, __PRETTY_FUNCTION__,       \
+                            __LINE__ );                                        \
+                std::cout.flush();                                             \
+            }                                                                  \
+        } while ( false )
 
-#define check_p( condition, message )                                          \
-    do {                                                                       \
-        if ( !( condition ) )                                                  \
+    #define check_f( condition )                                               \
+        do {                                                                   \
+            if ( !( condition ) )                                              \
+            {                                                                  \
+                fmt::print( orStyle, "\n{} FAILED ", #condition );             \
+                fmt::print( " {} {} {} ", __FILE__, __PRETTY_FUNCTION__,       \
+                            __LINE__ );                                        \
+                std::cout.flush();                                             \
+                std::terminate();                                              \
+            }                                                                  \
+        } while ( false )
+
+    #define check_fp( condition, message )                                     \
+        do {                                                                   \
+            if ( !( condition ) )                                              \
+            {                                                                  \
+                fmt::print( orStyle, "\n{} FAILED ", #condition );             \
+                std::cout << message;                                          \
+                fmt::print( " {} {} {} ", __FILE__, __PRETTY_FUNCTION__,       \
+                            __LINE__ );                                        \
+                std::cout.flush();                                             \
+                std::terminate();                                              \
+            }                                                                  \
+        } while ( false )
+
+    #define check_d( message )                                                 \
+        fmt::print( grStyle, " {} {} {} ", __FILE__, __PRETTY_FUNCTION__,      \
+                    __LINE__ );                                                \
+        std::cout << message;                                                  \
+        std::cout.flush();
+#else
+
+    #define check_p( condition, message )                                      \
         {                                                                      \
-            fmt::print( orStyle, "\n{} FAILED ", #condition );                 \
-            std::cout << message;                                              \
-            fmt::print( " {} {} {} ", __FILE__, __PRETTY_FUNCTION__,           \
-                        __LINE__ );                                            \
-            std::cout.flush();                                                 \
-        }                                                                      \
-    } while ( false )
-
-#define check_f( condition )                                                   \
-    do {                                                                       \
-        if ( !( condition ) )                                                  \
+        }
+    #define check_f( condition )                                               \
         {                                                                      \
-            fmt::print( orStyle, "\n{} FAILED ", #condition );                 \
-            fmt::print( " {} {} {} ", __FILE__, __PRETTY_FUNCTION__,           \
-                        __LINE__ );                                            \
-            std::cout.flush();                                                 \
-            std::terminate();                                                  \
-        }                                                                      \
-    } while ( false )
-
-#define check_fp( condition, message )                                         \
-    do {                                                                       \
-        if ( !( condition ) )                                                  \
+        }
+    #define check_fp( condition, message )                                     \
         {                                                                      \
-            fmt::print( orStyle, "\n{} FAILED ", #condition );                 \
-            std::cout << message;                                              \
-            fmt::print( " {} {} {} ", __FILE__, __PRETTY_FUNCTION__,           \
-                        __LINE__ );                                            \
-            std::cout.flush();                                                 \
-            std::terminate();                                                  \
-        }                                                                      \
-    } while ( false )
+        }
+    #define check_d( message )                                                 \
+        {                                                                      \
+        }
 
-#define check_d( message )                                                     \
-    fmt::print( grStyle, " {} {} {} ", __FILE__, __PRETTY_FUNCTION__,          \
-                __LINE__ );                                                    \
-    std::cout << message;                                                      \
-    std::cout.flush();
+#endif
 
 // using fmt::print;
 extern bool once;
