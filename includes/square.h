@@ -7,6 +7,14 @@
 #include "helper.h"
 #include "u64def.h"
 
+enum struct b_Square : u64
+{
+    b_alleceSq,
+
+    zb_sq_sz
+
+};
+
 enum struct b_SquareFlags : u64
 {
     b_sq_valid,
@@ -14,7 +22,7 @@ enum struct b_SquareFlags : u64
     b_sq_empty,
     b_sq_start,
     b_sq_end,
-    zSqSz
+    zSqFgSz
 };
 // 0-48 ece
 class Square
@@ -24,6 +32,8 @@ class Square
 
     void putEce( u64 ece );
     void popEce( u64 ece );
+
+ 
 
     u64 hasEce( u64 ece );
     u64 hasPlr( u64 plr ) const;

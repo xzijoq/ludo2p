@@ -27,15 +27,14 @@ void DebugSTest();
     #undef NDEBUG
 #endif
 
-
 int main()
 {
-
     cout << "\nMAIN STARTS HERE" << endl;
 
+ 
 
-
-
+  
+    //print( "\n{}", sq.DebugString() );
 
     cout << endl << "MAIN ENDS HERE" << endl;
 }

@@ -80,6 +80,14 @@ TEST( PieceTest, SetGetSwitchSqareT )
     ASSERT_EQ( ece.getSwitchSq(), num );
 }
 
+TEST( PieceTest, SetGetTeamT )
+{
+    Piece ece;
+    u64   num = MAX_TEAMS-1;
+    ece.setTeam( num );
+    ASSERT_EQ( ece.getTeam(), num );
+}
+
 TEST( PieceTest, SetGetFlagsT )
 {
     Piece ece;

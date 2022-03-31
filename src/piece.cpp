@@ -15,43 +15,50 @@
 #endif
 #include <cassert>
 
+using namespace Global;
+
+using fmt::format;
+using fmt::print;
+
+using enum b_PieceFlags;
+using enum b_Piece;
+
 //$ is safe,
 
 //$ elementes in this enum must have correct size in SzOf
 //$ in correct order
 
-constexpr std::array<u64, (u64)b_PieceLayout::zly_size>
-    b_SzOf_PieLay  // %order matters
+constexpr std::array<u64, (u64)zb_piece_size> b_PceSz  // %order matters
     {
         //% MUST MATCH b_PieceLayout Enum ABOVE
-        Global::ECE_SZb,  //*   b_ece,
-        Global::SQ_SZb,   //*   b_current_sq,
-        Global::SQ_SZb,   //*   b_entry_sq,
-        Global::SQ_SZb    //*   b_switch_sq,
+        Global::ECE_SZb,   //*   b_ece,
+        Global::SQ_SZb,    //*   b_current_sq,
+        Global::SQ_SZb,    //*   b_entry_sq,
+        Global::SQ_SZb,    //*   b_switch_sq,
+        Global::MAX_TEAMS  //*   b_team,
     };
 
-void Piece::InitPiece( u64 ece, u64 sq, u64 entry_sq, u64 switch_sq )
+void Piece::InitPiece( u64 ece, u64 sq, u64 entry_sq, u64 switch_sq,u64 team )
 {
     setEce( ece );
     setSq( sq );
     setEntrySq( entry_sq );
     setSwitchSq( switch_sq );
+    setTeam(team);
 }
 
-consteval u64 b_frm( const b_PieceLayout inx )
+consteval u64 b_Pcefrm( const b_Piece inx )
 {
     u64 result = 0;
-    for ( u64 i = 0; i < (u64)inx; i++ ) { result += b_SzOf_PieLay[(u64)i]; }
+    for ( u64 i = 0; i < (u64)inx; i++ ) { result += b_PceSz[(u64)i]; }
     return result;
 }
-constexpr u64 b_frm_nc( const b_PieceLayout inx )
+constexpr u64 b_frm_nc( const b_Piece inx )
 {
     u64 result = 0;
-    for ( u64 i = 0; i < (u64)inx; i++ ) { result += b_SzOf_PieLay[(u64)i]; }
+    for ( u64 i = 0; i < (u64)inx; i++ ) { result += b_PceSz[(u64)i]; }
     return result;
 }
-
-
 
 void Piece::setEce( u64 plr, u64 awn )
 {
@@ -59,66 +66,71 @@ void Piece::setEce( u64 plr, u64 awn )
     setEce( Global::GetEce( plr, awn ) );
 }
 
-
-void Piece::setAny(b_PieceLayout what, u64 value){
-        mPiece=SetBits( mPiece, value, b_frm_nc( what ),
-             b_SzOf_PieLay[(u64)what] );
+void Piece::setAny( b_Piece what, u64 value )
+{
+    mPiece = SetBits( mPiece, value, b_frm_nc( what ), b_PceSz[(u64)what] );
 }
 
 void Piece::setEce( u64 ece )
 {
-    mPiece=SetBits( mPiece, ece, b_frm( b_PieceLayout::b_ece ),
-             b_SzOf_PieLay[(u64)b_PieceLayout::b_ece] );
+    mPiece = SetBits( mPiece, ece, b_Pcefrm( b_pece ), b_PceSz[(u64)b_pece] );
     // SetBits( mEce, ece, ece_frm, ece_sz );
 }
 
 u64 Piece::getEce() const
 {
-    return GetBits( mPiece, b_frm( b_PieceLayout::b_ece ),
-                    b_SzOf_PieLay[(u64)b_PieceLayout::b_ece] );
+    return GetBits( mPiece, b_Pcefrm( b_pece ), b_PceSz[(u64)b_pece] );
 }
 
 void Piece::setSq( u64 sq )
 {
-    mPiece=SetBits( mPiece, sq, b_frm( b_PieceLayout::b_current_sq ),
-             b_SzOf_PieLay[(u64)b_PieceLayout::b_current_sq] );
+    mPiece = SetBits( mPiece, sq, b_Pcefrm( b_current_sq ),
+                      b_PceSz[(u64)b_current_sq] );
 }
 
 u64 Piece::getSq() const
 {
-    return GetBits( mPiece, b_frm( b_PieceLayout::b_current_sq ),
-                    b_SzOf_PieLay[(u64)b_PieceLayout::b_current_sq] );
+    return GetBits( mPiece, b_Pcefrm( b_current_sq ),
+                    b_PceSz[(u64)b_current_sq] );
 }
 
 void Piece::setEntrySq( u64 sq )
 {
-    mPiece=SetBits( mPiece, sq, b_frm( b_PieceLayout::b_entry_sq ),
-             b_SzOf_PieLay[(u64)b_PieceLayout::b_entry_sq] );
+    mPiece =
+        SetBits( mPiece, sq, b_Pcefrm( b_entry_sq ), b_PceSz[(u64)b_entry_sq] );
 }
 
 u64 Piece::getEntrySq() const
 {
-    return GetBits( mPiece, b_frm( b_PieceLayout::b_entry_sq ),
-                    b_SzOf_PieLay[(u64)b_PieceLayout::b_entry_sq] );
+    return GetBits( mPiece, b_Pcefrm( b_entry_sq ), b_PceSz[(u64)b_entry_sq] );
 }
 
 void Piece::setSwitchSq( u64 sq )
 {
-    mPiece=SetBits( mPiece, sq, b_frm( b_PieceLayout::b_switch_sq ),
-             b_SzOf_PieLay[(u64)b_PieceLayout::b_switch_sq] );
+    mPiece = SetBits( mPiece, sq, b_Pcefrm( b_switch_sq ),
+                      b_PceSz[(u64)b_switch_sq] );
 }
 
 u64 Piece::getSwitchSq() const
 {
-    return GetBits( mPiece, b_frm( b_PieceLayout::b_switch_sq ),
-                    b_SzOf_PieLay[(u64)b_PieceLayout::b_switch_sq] );
+    return GetBits( mPiece, b_Pcefrm( b_switch_sq ),
+                    b_PceSz[(u64)b_switch_sq] );
+}
+
+void Piece::setTeam( u64 team )
+{
+    mPiece = SetBits( mPiece, team, b_Pcefrm( b_team ), b_PceSz[(u64)b_team] );
+}
+
+u64 Piece::getTeam() const
+{
+    return GetBits( mPiece, b_Pcefrm( b_team ), b_PceSz[(u64)b_team] );
 }
 
 u64 Piece::getPlr()
 {
     //! potential bug fraction to u64
     u64 result = getEce() / Global::MAX_PAWNS;
-    
 
     return result;
 }
@@ -127,9 +139,9 @@ u64 Piece::getAwn() { return getEce() % Global::MAX_PAWNS; }
 
 void Piece::setFlag( b_PieceFlags flg, bool what )
 {
-    check_f( ( 63 - (u64)flg ) > b_frm( b_PieceLayout::zly_size ) );
-    ( what ) ? mPiece=SetBit( mPiece, 63 - (u64)flg )
-             : mPiece=UnSetBit( mPiece, 63 - (u64)flg );
+    check_f( ( 63 - (u64)flg ) > b_Pcefrm( b_Piece::zb_piece_size ) );
+    ( what ) ? mPiece = SetBit( mPiece, 63 - (u64)flg )
+             : mPiece = UnSetBit( mPiece, 63 - (u64)flg );
 }
 
 u64 Piece::getFlag( b_PieceFlags flg )
@@ -137,24 +149,18 @@ u64 Piece::getFlag( b_PieceFlags flg )
     return GetBit( mPiece, 63 - (u64)flg );
 }
 
-using namespace Global;
-
-using fmt::format;
-using fmt::print;
-
-using enum b_PieceFlags;
-using enum b_PieceLayout;
 //&Debug ahead
 
 void Piece::CheckPiece( u64 crntSq, u64 crntPlr, u64 crntAwn )
 {  //@In complete
     u64 result = crntSq;
-    result=crntPlr;
-    result=crntAwn;
-    result ++;
-    check_fp(  Global::GetEce( getPlr(), getAwn() ) < MAX_PIECE_COUNT ,
-      format( "Ece:{}  MAX_PIECE:{}", Global::GetEce( getPlr(), getAwn() ), MAX_PIECE_COUNT ) );
-    
+    result     = crntPlr;
+    result     = crntAwn;
+    result++;
+    check_fp( Global::GetEce( getPlr(), getAwn() ) < MAX_PIECE_COUNT,
+              format( "Ece:{}  MAX_PIECE:{}",
+                      Global::GetEce( getPlr(), getAwn() ), MAX_PIECE_COUNT ) );
+
     check_fp(
         getEce() < crntPlr * crntAwn,
         format( "Ece:{} != cP: {} * cA: {}", getEce(), crntPlr, crntAwn ) );
@@ -173,9 +179,10 @@ void Piece::CheckPiece( u64 crntSq, u64 crntPlr, u64 crntAwn )
     check_fp( getAwn() < crntAwn,
               format( "getAwn: {} crntAwn:{}", getAwn(), crntAwn ) );
 
-    check_fp( ( 63 - (u64)z_PieceFlagsSize ) > (u64)b_frm_copy( zly_size ),
-              format( "TringSet: {} LayoutSz:{}", 63 - (u64)z_PieceFlagsSize,
-                      (u64)b_frm_copy( zly_size ) ) );
+    check_fp(
+        ( 63 - (u64)zb_piece_flags_size ) > (u64)b_frm_nc( zb_piece_size ),
+        format( "TringSet: {} LayoutSz:{}", 63 - (u64)zb_piece_flags_size,
+                (u64)b_frm_nc( zb_piece_size ) ) );
 }
 void Piece::CheckPiece( GameState gs )
 {  //@In complete
@@ -209,9 +216,13 @@ std::string Piece::DebugString() const
         {
             res += fmt::format( fwStyle, " entry_sq({}):", getEntrySq() );
         }
-        else if ( b_frm_nc( zly_size ) == i )
+        else if ( b_frm_nc( b_team ) == i )
         {
             res += fmt::format( fwStyle, " switch_sq({}):", getSwitchSq() );
+        }
+        else if ( b_frm_nc( zb_piece_size ) == i )
+        {
+            res += fmt::format( fwStyle, " Team({}):", getTeam() );
         }
     }
 

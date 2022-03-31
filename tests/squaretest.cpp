@@ -26,14 +26,6 @@ TEST( SquareTest, Put0Has0Pop_Ece )
     s1.popEce( MAX_PIECE_COUNT - 1 );
     ASSERT_FALSE( s1.hasEce( MAX_PIECE_COUNT - 1 ) );
 
-    //* Rand
-    s1.mSquare = 0;
-    u64 ran    = (u64)rand() % MAX_PIECE_COUNT - 1;
-    ASSERT_FALSE( s1.hasEce( ran ) );
-    s1.putEce( ran );
-    ASSERT_TRUE( s1.hasEce( ran ) );
-    s1.popEce( ran );
-    ASSERT_FALSE( s1.hasEce( ran ) );
 
     //for ( u64 i = 0; i < MAX_PIECE_COUNT; i++ )
     //{
@@ -71,18 +63,7 @@ TEST( SquareTest, hasPlrT )
         ASSERT_FALSE( s1.hasPlr( i ) );
     }
 
-    s1.mSquare = 0;
-    u64 rpl    = (u64)rand() % (  MAX_PLAYERS - 1 );
-    u64 rpw    = (u64)rand() % (  MAX_PAWNS - 1 );
-    u64 rece   = Global::GetEce( rpl, rpw );
-
-    // std::cout<<"\n"<<rece<<std::endl;
-    ASSERT_FALSE( s1.hasPlr( rpl ) );
-    s1.putEce( rece );
-    for ( u64 i = 0; i <  MAX_PLAYERS; i++ )
-    {
-        if ( i != rpl ) { ASSERT_FALSE( s1.hasPlr( i ) ); }
-    }
+ 
 }
 
 TEST( SquareTest, SetGetFlags )

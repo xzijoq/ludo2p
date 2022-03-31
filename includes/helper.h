@@ -16,7 +16,7 @@
     #define where __FILE__, __function__, __LINE__
 #endif
 //#define ASIO_ENABLE_HANDLER_TRACKING
-//#define CompileDebug
+#define CompileDebug
 #ifdef CompileDebug
     #define check_p( condition, message )                                      \
         do {                                                                   \

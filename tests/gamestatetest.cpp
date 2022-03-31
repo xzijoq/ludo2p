@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 
-#include "global.h"
-#include "gamestate.h"
 #include "RegularMaps.h"
+#include "gamestate.h"
+#include "global.h"
 using namespace Global;
 TEST( GameStateTest, SetGetCnt )
 {
@@ -67,7 +67,7 @@ TEST( GameStateTest, InitGameState )
     u64       crntAwnCnt = 0;
     u64       otrSqCnt   = 0;
     u64       inrSqCnt   = 0;
-    gs.InitGameState( maxPlrCnt, crntPlrCnt, crntAwnCnt, otrSqCnt, inrSqCnt );
+    gs.InitGameState( maxPlrCnt, crntPlrCnt, crntAwnCnt,crntPlrCnt, otrSqCnt, inrSqCnt );
     ASSERT_EQ( maxPlrCnt, gs.getMaxPlrCnt() );
     ASSERT_EQ( crntPlrCnt, gs.getCrntPlrCnt() );
     ASSERT_EQ( crntAwnCnt, gs.getCrntAwnCnt() );
@@ -83,7 +83,8 @@ TEST( GameStateTest, InitGameState )
     ASSERT_LT( temp, MAX_SQUARES );
     otrSqCnt = MAX_SQUARES - (u64)temp;
 
-    gs.InitGameState( maxPlrCnt, crntPlrCnt, crntAwnCnt, otrSqCnt, inrSqCnt );
+    gs.InitGameState( maxPlrCnt, crntPlrCnt, crntAwnCnt, crntPlrCnt, otrSqCnt,
+                      inrSqCnt );
     // std::cout << gs.DebugString();
     ASSERT_EQ( maxPlrCnt, gs.getMaxPlrCnt() );
     ASSERT_EQ( crntPlrCnt, gs.getCrntPlrCnt() );

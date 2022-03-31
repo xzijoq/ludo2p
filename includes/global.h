@@ -32,7 +32,8 @@ inline constexpr u64 ROLL_SZb = ceillog2( MAX_ROLL);
 inline constexpr u64 MAX_PLAYERS     = 8;
 inline constexpr u64 MAX_PAWNS       = 6;
 
-
+inline constexpr u64 MAX_TEAMS =8;
+inline constexpr u64  TEAM_SZb=Global::ceillog2( MAX_TEAMS);
 
 
 

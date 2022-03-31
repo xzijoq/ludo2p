@@ -1,17 +1,26 @@
 #pragma once
-#include "square.h"
+
 #include "u64def.h"
+enum struct b_GMove : u64
+{
+    b_mece,
+    b_frm_sq,
+    b_to_sq,
+    b_roll,
+    zb_gmv_size
+
+};
+
 enum b_GMoveFlags
 {
     nope,
-    zfg_size
+    zb_gmv_fg_size
 };
 
 struct GraphicsMove
 {
-    u64 mGMoveData;
-    //* Semantic problem, square is a holder of all piece
-    Square mGMoveCaptured;
+    u64 mGMove;
+
 
     void setMEce( u64 ece );
     u64  getMEce() const;

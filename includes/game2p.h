@@ -78,7 +78,7 @@ static constexpr u64 active = 1;
  inline void Game2p::InitGame( u64 numPlr, u64 numAwn )
 {
    // check_f( numPlr * numAwn == (u64)EceSz );
-    mGState.InitGameState( MaxPlayers2p, numPlr, numAwn, OuterSqCnt2p,
+    mGState.InitGameState( MaxPlayers2p, numPlr, numAwn, numPlr,OuterSqCnt2p,
                            InnerSqCnt2p );
  
     //$todo initialize flags
@@ -90,8 +90,9 @@ static constexpr u64 active = 1;
         {
             u64 ThisEce = Global::GetEce( pl, awn );
             Ece[ThisEce].InitPiece( ThisEce, HomeSquare2p, EntrySq2p[pl],
-                                    SwitchSq2p[pl] );
+                                    SwitchSq2p[pl],pl );
             Sq[HomeSquare2p].putEce( ThisEce );
+ 
         }
     }
     for ( u64 sq : SafeSquare ) { Sq[sq].setFlag( b_sq_safe, true ); }
