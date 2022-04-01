@@ -36,7 +36,7 @@ void checkPiceIsOn( u64 sq, int count, ... )
     va_end( args );
 }
 //$ THE MOST IMPORTANT TEST OF PROJECT
-
+/*
 TEST( Game2pTest, GameMove2p )
 {
     Game2p gme;
@@ -358,7 +358,7 @@ TEST( Game2pTest, GameMove2p )
     // print( "\np10: {}", p10.DebugString() );
     // print( "\np13: {}", p13.DebugString() );
 }
-
+*/
 //$ THE MOST IMPORTANT TEST OF PROJECT END
 
 TEST( Game2pTest, InitGame )

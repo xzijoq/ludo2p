@@ -122,7 +122,6 @@ def MainFunc():
     return 0
 
 
-
 def goRun_check():
     p_fnc("executing")
     validLis = ['c', 'r', 'b', 'x', 't', 'gc', 'gx', 'clean']
@@ -147,8 +146,8 @@ def goRun_check():
             clean: clean() and return\n\
             --help: for help\n\
         ")
-
         p_err("Please Enter a Valid Command", Fatal)
+
     if(('c' in args.goRun) and conan == False):
         p_wrn(f"Coan is set to false, yet coanan_run() was requested via arg 'c'\n")
 
@@ -157,7 +156,7 @@ def goRun_check():
     if(('gx' in args.goRun) and godot == False):
         p_wrn("Godot is set to false, yet  godot_run() was requested via arg 'gx'\n")
 
-    if(('gx' in args.goRun) and not goRun_has('gc')):
+    if(('gx' in args.goRun) and not 'gc' in args.goRun):
         p_err("Will Try To Run Godot Scene Without Copying THe LIBRARY !!!! \n")
 
     if(('x' in args.goRun) and TargetApp == False):

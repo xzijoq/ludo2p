@@ -24,5 +24,6 @@
 - Networking
   - multi server mode, server mode and client mode
   - encryption
-
+## :hammer:ToDo Architecture
+- fix complie times
 ## :books: Notes may me found in [Notes.md ](./Notes.md) in this directory

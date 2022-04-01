@@ -26,7 +26,7 @@ set(OPENSSL_USE_STATIC_LIBS TRUE)
 
 set(Core core)
 
-set(CommonFlg -Wall --std=c++2b -fPIC -g3 -Wconversion -Wextra -Wpedantic)
+set(CommonFlg -Wall --std=c++2b -fPIC -g3)# -Wconversion -Wextra -Wpedantic)
 
 set(CommonLib fmt::fmt OpenSSL::SSL OpenSSL::Crypto asio::asio SQLite::SQLite3)
 
