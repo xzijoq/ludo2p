@@ -6,7 +6,6 @@ import subprocess
 import sys
 import argparse
 import shutil
-import time
 
 from os.path import join
 from os.path import isdir
@@ -18,8 +17,6 @@ conan = True
 TargetApp = True
 EnableTest = True
 godot = False
-RecordTime = False
-ShowTime=False
 # ---------DEFS DONT ALTER-------------
 cwd = os.getcwd()
 Fatal = True
@@ -36,12 +33,10 @@ if conan:
 
     # 'clang' | ''/'default'
     conan_profile_host = "default"
-    conan_profile_host = "android"
     conan_profile_host = "clang"
 
     conan_profile_build = "default"
     conan_profile_build = "clang"
-
     conan_profile_host_path = join(conan_dir_path, conan_profile_host)
     conan_profile_build_path = join(conan_dir_path, conan_profile_build)
 
@@ -60,14 +55,12 @@ if Fatal == True:
 
     cmake_compiler = ""
     cmake_compiler = "clang++"
-    cmake_c_compiler = "clang"
 
+    cmake_build_type = "Relese"
     cmake_build_type = "Debug"
-    cmake_build_type = "Release"
 
-    # cmake_generator = "\"Ninja Multi-Config\"" notWorking
     cmake_generator = "Ninja"
-
+    #"\"Ninja Multi-Config\""
     # leave empty if using conan
     cmake_toolchain_path = ""
 
@@ -93,7 +86,7 @@ if EnableTest == True:
 if godot:
     godot_scene = "Display.tscn"
     godot_executable = f"/home/babayaga/godot/godotb"
-    godot_project_path = join(cwd, "godot/tanks")
+    godot_project_path = f"/home/babayaga/godot/projects/ludo2p/godot/gludo2p"
     godot_relative_src_path = f"godot/src_godot"
     godot_lib = ["libgui.so"]
     godot_dir = join(godot_project_path, "bin")
@@ -101,18 +94,10 @@ if godot:
 # -------------------Godot DATA ENDS----------------------
 
 
-if RecordTime:
-    rTime = []
-    pass
-
-
 # ---------------MAIN STARTS HERE----------------------
 
 
 def MainFunc():
-
-    global rTime
-    fTime=time.time()
     p_fnc("executing")
     goRun_check()
     if 'clean' in args.goRun:
@@ -133,18 +118,11 @@ def MainFunc():
     if 'gx' in args.goRun:
         godot_run()
     goRun_check()
-
-    if RecordTime:
-        for i in rTime:
-          p_time(i)
-
-    pr_time(str(time.time()-fTime))
     p_mwg("Script END")
     return 0
 
 
 def goRun_check():
-    fTime=time.time()
     p_fnc("executing")
     validLis = ['c', 'r', 'b', 'x', 't', 'gc', 'gx', 'clean']
     isValid = False
@@ -185,10 +163,9 @@ def goRun_check():
         p_wrn("TargetApp is set to false, yet run_target() was requested via arg 'x'\n")
     if(('t' in args.goRun) and EnableTest == False):
         p_wrn("EnableTest is set to false, yet run_test) was requested via arg 't'\n")
-    pr_time(str(time.time()-fTime))
+
 
 def cmake_run():
-    fTime=time.time()
     p_fnc("Executing")
     global cmake_toolchain_path
     if not isfile(join(cwd, "CMakeLists.txt")):
@@ -229,21 +206,16 @@ def cmake_run():
     if(not {args.cma} == ""):
         cmake_command += f" {args.cma}"
 
-    cmake_command += f"--warn-uninitialized"
-
-    sTime=time.time()
-    result = subprocess.run(f"{cmake_command}", shell=True)
+    result = subprocess.run([cmake_command], shell=True)
     p_nfy(f"{result}")
-    pr_time("cmake -S..:       "+str(time.time()-sTime))
 
     if not result.returncode == 0:
         p_err(f"Failed : {result.returncode}", Fatal)
-    pr_time(str(time.time()-fTime))
+
     pass
 
 
 def cmake_build():
-    fTime=time.time()
     p_fnc("executing")
     if not os.path.isdir(build_dir):
         p_nfy("Try calling the script with f/r or full/run")
@@ -254,13 +226,10 @@ def cmake_build():
     if not(args.cba == ""):
         cmake_build_command += f"{args.cba}"
 
-    sTime=time.time()
     result = subprocess.run(
-        f"{cmake_build_command}", shell=True)
+        [cmake_build_command], shell=True)
     p_nfy(f"{result}")
-    pr_time("cmake --build:       "+str(time.time()-sTime))
 
-    #& CopyCopileCommands
     if not result.returncode == 0:
         p_err(f"Failed : {result.returncode}", Fatal)
 
@@ -274,13 +243,13 @@ def cmake_build():
             join(build_dir, "compile_commands.json"),
             join(cwd, "compile_commands.json"),
         )
+
     else:
         p_wrn(
             f"can'nt find compile_commands.json in build dir: {build_dir_path}")
-    pr_time(str(time.time()-fTime))
+
 
 def run_target():
-    fTime=time.time()
     p_fnc("Executing")
     if TargetApp == False:
         p_wrn("TargetApp is DEFINED FALSE")
@@ -299,16 +268,14 @@ def run_target():
     if not isfile(target_path):
         p_err(f"NotFound {target_path}")
         return
-    sTime = time.time()
+
     result = subprocess.run(
         [f"{target_path} {args.exa}"], shell=True
     )
-    p_nfy(f"{result} ")
-    pr_time("consoleRunTime:       "+str(time.time()-sTime))
-    pr_time(str(time.time()-fTime))
+    p_nfy(f"{result}")
+
 
 def run_test():
-    fTime=time.time()
     p_fnc("executing")
     if EnableTest == False:
         p_wrn("EnableTest is FALSE")
@@ -321,14 +288,11 @@ def run_test():
         test_command = test_path
         if args.tea != "":
             test_command += args.tea
-        sTime = time.time()
-        result = subprocess.run(f"{test_command}", shell=True)
+        result = subprocess.run([test_command], shell=True)
         p_nfy(f"{result}")
-        pr_time("Test"+str(i)+": "+str(time.time()-sTime))
-    pr_time(str(time.time()-fTime))
+
 
 def conan_run():
-    fTime=time.time()
     p_fnc("executing")
     if not conan:
         p_wrn("Conan is DEFINED FALSE")
@@ -353,16 +317,13 @@ def conan_run():
              --profile:host={conan_profile_host_path}"
     if(not {args.coa} == ""):
         conan_r += f" {args.coa}"
-    sTime=time.time()
-    result = subprocess.run(f"{conan_r}", shell=True)
+    result = subprocess.run([conan_r], shell=True)
     p_nfy(f"{result}")
-    pr_time("conan install:       "+str(time.time()-sTime))
     if not result.returncode == 0:
         p_err("Failed", Fatal)
-    pr_time(str(time.time()-fTime))
+
 
 def clean():
-    fTime=time.time()
     p_fnc("Executing")
     shutil.rmtree(join(cwd, ".vscode"), ignore_errors=True)
     shutil.rmtree(join(cwd, ".cache"), ignore_errors=True)
@@ -373,10 +334,9 @@ def clean():
             target_lib = join(godot_dir, i)
             if isfile(target_lib):
                 os.remove(target_lib)
-    pr_time(str(time.time()-fTime))
+
 
 def godot_copy():
-    fTime=time.time()
     p_fnc("executing")
     if godot == False:
        # p_wrn("Godot is set to False")
@@ -407,10 +367,9 @@ def godot_copy():
             p_wrn(f"{target_lib} not fouind")
         p_msg(f"copying {src_lib} --> {target_lib}")
         ts = shutil.copy(src_lib, target_lib)
-    pr_time(str(time.time()-fTime))
+
 
 def godot_run():
-    fTime=time.time()
     p_fnc("executing")
     if godot == False:
         #p_wrn("Godot is set to False")
@@ -433,12 +392,11 @@ def godot_run():
     if not isfile(scene_path):
         p_err(f"Does Not Exist:--- {godot_scene} --AT \n {scene_path} ")
         return False
-
     runs = f"{godot_executable} -d {scene_path}"
-    result = subprocess.run(f"{runs}", shell=True)
+    result = subprocess.run([runs], shell=True)
     p_nfy(f"{result}")
- 
-    pr_time(str(time.time()-fTime))
+    pass
+
 
 # -------------------PARSER STARTS HERE----------------------
 parser = argparse.ArgumentParser()
@@ -517,28 +475,6 @@ def p_err(what, isFatal=False):
         \033[00m")
     if isFatal:
         quit()
-
-
-def pr_time(what):
-    callerframerecord = inspect.stack()[1]
-    frame = callerframerecord[0]
-    info = inspect.getframeinfo(frame)
-    if RecordTime:
-        global rTime
-        rTime.append("   "+what+f"  {info.function}")
-    if not ShowTime:
-        return
-    print(f"\033[30;10;1m       Time: {what}\
-        func:{info.function}\
-        line:{info.lineno}\
-        \033[00m")
-
-def p_time(what):
-    callerframerecord = inspect.stack()[1]
-    frame = callerframerecord[0]
-    info = inspect.getframeinfo(frame)
-    print(f"\033[1;10;1m {what}\
-        \033[00m")
 
 # ---------------- PRINT FUNCS END---------------
 

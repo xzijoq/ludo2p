@@ -1,0 +1,9 @@
+{
+    "version": 4,
+    "vendor": {
+        "conan": {}
+    },
+    "include": [
+        "/home/babayaga/code/ludo2p/conan_cmake/CMakePresets.json"
+    ]
+}
